@@ -1,7 +1,7 @@
 1.page 的基础设置:
      var _index = page.extend({
-            title:$页面标题$,
-            tplHtml: $模版$,//参照tpl说明
+            title:'页面标题',
+            tplHtml: '模版',//参照tpl说明
             scroll: undefined,//滚动参数
             page: 1,//分页参数
             pageSize: 3,//分页参数
@@ -35,6 +35,7 @@
                 return _self;
             }
         });
+        
 2.'utiles/refresh', 'utiles/scroll'
 例子:refresh(_self.el[0], 'pullUp', function () {
                             api.product.getByPage({
