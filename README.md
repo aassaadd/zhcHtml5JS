@@ -1,5 +1,6 @@
 1.page 的基础设置:
-     var _index = page.extend({
+
+var _index = page.extend({
             title:'页面标题',
             tplHtml: '模版',//参照tpl说明
             scroll: undefined,//滚动参数
@@ -37,7 +38,8 @@
         });
         
 2.'utiles/refresh', 'utiles/scroll'
-例子:refresh(_self.el[0], 'pullUp', function () {
+例子:
+refresh(_self.el[0], 'pullUp', function () {
                             api.product.getByPage({
                                 status: 1,
                                 proState: 1,
@@ -62,5 +64,7 @@
                                 }
                             });
                         });
-例子:_self.scroll = scroll(_self.el[0]);
+                        
+例子:
+_self.scroll = scroll(_self.el[0]);
 3.模版tpl 参照artTemplate
