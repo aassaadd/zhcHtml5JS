@@ -1,0 +1,83 @@
+<div class="page">
+    <div class="m-index">
+        <div class="m-focus-swipe">
+            <div id="mfs-id" class="mfs-wrap" zhc-scope="topList">
+                <ul>
+                    {{each list}}
+                    <li zhc-click="top({{$value | obj2json}})"><a href="javascript:;"><img
+                            src="{{ $value.advImgId | file2img}}"/></a></li>
+
+                    {{/each}}
+                </ul>
+                <ol>
+                    {{each list}}
+                    {{if $index==0}}
+                    <li class="on"></li>
+                    {{/if}}
+
+                    {{if $index!=0}}
+                    <li></li>
+                    {{/if}}
+                    {{/each}}
+                </ol>
+                <!--<a class="mfs-like">500</a>-->
+            </div>
+        </div>
+        <div class="m-header-menu2">
+            <ul>
+                <li id="clickClass" ><a href="javasctipt:;" zhc-click="clickClass()"><em><i>产品分类</i></em></a></li>
+                <li id="clickStatus" ><a href="javasctipt:;" zhc-click="clickStatus()"><em><i>试用状态</i></em></a></li>
+                <li id="clickExamine" ><a href="javasctipt:;" zhc-click="clickExamine()"><em><i>申请条件</i></em></a></li>
+            </ul>
+            <div class="ml-tag"  id="selStatus" style="display: none">
+                <span ><a href="javascript:;" zhc-click="selStatus(1)">可申请使用</a></span>
+                <span ><a href="javascript:;" zhc-click="selStatus(2)">使用中</a></span>
+                <span ><a href="javascript:;" zhc-click="selStatus(3)">报告回收中</a></span>
+                <span ><a href="javascript:;" zhc-click="selStatus(4)">已结束</a></span>
+            </div>
+            <div class="ml-tag" zhc-scope="selQuery" id="selClass" style="display: none">
+                {{each list}}
+                <span ><a href="javascript:;" zhc-click="selClass({{$value.id}})">{{$value.procName}}</a></span>
+                {{/each}}
+            </div>
+            <div class="ml-tag"  id="selExamine" style="display: none">
+                <span ><a href="javascript:;" zhc-click="selExamine(1)">需要审核</a></span>
+                <span ><a href="javascript:;" zhc-click="selExamine(0)">不需要审核</a></span>
+            </div>
+        </div>
+        <div class="m-index-list" >
+            <ul zhc-scope="list">
+                {{each list}}
+                <li>
+                    <div class="uitool-cell">
+                        <div class="uitool-cell-hd">
+                            <label><img src="{{$value.imgId | file2img}}"/></label>
+                        </div>
+                        <div class="uitool-cell-bd">
+                            <h4>{{$value.proName}}</h4>
+
+                            <p>{{$value.proAbout}}</p>
+
+                            <div class="no">
+                                <label>产品数量：</label>
+                                <span>{{$value.proCount}}个</span>
+                            </div>
+                            <div class="like">{{$value.proSoldCount}}</div>
+                            <div class="time">
+                                <label>申请截至日期：</label>
+                                <span>{{$value.proEndDate | dateFormat:'yyyy-MM-dd'}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mil-bot">
+                        <span class="left">试用价：<em>￥{{$value.proTryPrice/100}}</em></span>
+                        <span class="right"><a href="javascript:;" class="u-btn {{$value.proOpenState | proOpenStateCss}}"
+                                               zhc-click="go({{$value | obj2json}})">{{$value.proOpenState |
+                            proOpenStateString}}</a></span>
+                    </div>
+                </li>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+</div>

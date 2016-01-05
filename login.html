@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+          name="viewport">
+    <meta content="telephone=no" name="format-detection"/>
+    <meta content="email=no" name="format-detection"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!--设置页面标题-->
+    <title>一元购</title>
+    <!-- css -->
+    <link rel="stylesheet" type="text/css" href="css/uitool-reset.css" media="all">
+    <link rel="stylesheet" type="text/css" href="css/uitool-modular.css" media="all">
+    <script type="text/javascript">
+        var resize = function () {
+            var html = document.documentElement,
+                    w = html.clientWidth / 320, w = 16 * w;
+            html.setAttribute('style', 'font-size:' + w + 'px');
+        }
+        window.addEventListener('resize', function () {
+            resize();
+        });
+        resize();
+    </script>
+</head>
+<body>
+
+<div class="login-pages"></div>
+<div class="m-login">
+    <h3 class="ml-logo"><a href="javascript:;"><img src="images/logo.fw.png"/></a></h3>
+
+    <div class="ml-tag">
+        <span class="current" id="selCall"><a href="javascript:;">手机号码登录</a></span>
+        <span id="selName"><a href="javascript:;">帐号密码登录</a></span>
+    </div>
+    <div class="ml-form">
+        <div class="uitool-cell">
+            <div class="uitool-cell-hd">
+                <label><i class="iconfont-user"></i></label>
+            </div>
+            <div class="uitool-cell-bd">
+                <input type="text" placeholder="请输入手机号" id="userName">
+            </div>
+        </div>
+        <div class="uitool-cell">
+            <div class="uitool-cell-hd">
+                <label><i class="iconfont-pass"></i></label>
+            </div>
+            <div class="uitool-cell-bd">
+                <input type="password" placeholder="请输入短信验证码" id="userPassword">
+                <a href="javascript:;" id="getMegs">获取验证码</a>
+            </div>
+        </div>
+    </div>
+    <div class="ml-prompt">
+        <p>尚未注册用户将自动创建为会员用户</p>
+    </div>
+    <div class="ml-btn">
+        <a href="javascript:;" class="u-btn u-btn-success" id="submit">登录</a>
+    </div>
+
+    <div class="ml-btn">
+        <a href="javascript:;" class="u-btn u-btn-success" id="wxsubmit">微信登录</a>
+    </div>
+</div>
+
+</body>
+<!-- lib -->
+<!--jQuery -->
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<!--JSON-->
+<script src="//cdn.bootcss.com/json3/3.3.2/json3.min.js"></script>
+
+<!-- app -->
+<script type="text/javascript">
+    (function ($) {
+        var type = 1;//手机验证,2用户名
+        $(document).ready(function () {
+            if (window.localStorage) {
+                window.localStorage.clear();
+            }
+            var url = location.search; //获取url中"?"符后的字串
+            var theRequest = new Object();
+            if (url.indexOf("?") != -1) {
+                var str = url.substr(url.indexOf('?') + 1);
+                strs = str.split("&");
+                for (var i = 0; i < strs.length; i++) {
+                    theRequest[strs[i].split("=")[0]] = (strs[i].split("=")[1]);
+                }
+            }
+            if (theRequest.token) {
+                window.localStorage.token = theRequest.token;
+                window.location.replace('index.html#index');
+            }
+            if (theRequest.openid) {
+                window.localStorage.openid = theRequest.openid;
+            }else{
+                //统一获得openid--------
+                var appid = 'wx55210e305eb0d56c',
+                        appSecret = '7cb7c98da1619c929a00f9019f6d6540',
+                        scope = 'snsapi_base',//snsapi_base,snsapi_userinfo
+                        state_url = encodeURIComponent(window.location.protocol + '//' + window.location.host + ':' + window.location.port + '/myt_wx/api/getOpenidForCode'),
+                        redirect_uri = encodeURIComponent('http://fmt.bbtang.com/wxauth/?app=try&url=' + state_url),
+                        oauthUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid + '&redirect_uri=' + redirect_uri + '&response_type=code&scope=' + scope + '&state=' + encodeURIComponent(window.location.origin + window.location.pathname) + '#wechat_redirect';
+                window.location.replace(oauthUrl);
+            }
+            $('#submit').on('click', function (e) {
+                if (window.localStorage) {
+                    window.localStorage.clear();
+//                    window.localStorage.rememberMe=$('#rememberMe').val();
+                    window.localStorage.token = '';
+                    if (type == 2) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '/myt_wx/api/login',
+                            data: JSON.stringify({
+                                userName: $('#userName').val(),
+                                userPassword: $('#userPassword').val()
+                            }),
+                            dataType: 'json',
+                            timeout: 30000,
+                            contentType: 'application/json',
+                            success: function (data) {
+                                if (data && data.data) {
+                                    console.log(data);
+                                    window.localStorage.token = data.data.token;
+                                    window.location.replace('index.html#index');
+                                } else {
+                                    alert(data.message);
+                                }
+                            }
+
+                        });
+                    } else {
+                        $.ajax({
+                            type: 'POST',
+                            url: '/myt_wx/api/loginForMsg',
+                            data: JSON.stringify({
+                                mobile: $('#userName').val(),
+                                code: $('#userPassword').val()
+                            }),
+                            dataType: 'json',
+                            timeout: 30000,
+                            contentType: 'application/json',
+                            success: function (data) {
+                                if (data && data.data) {
+                                    console.log(data);
+                                    window.localStorage.token = data.data.token;
+                                    window.location.replace('index.html#index');
+                                } else {
+                                    alert(data.message);
+                                }
+                            }
+
+                        });
+                    }
+
+                } else {
+                    alert('对不起您的浏览器版本太低不支持此系统');
+                }
+            });
+            $('#selCall').on('click', function () {
+                $('#selCall').addClass('current');
+                $('#selName').removeClass('current');
+                $('#userName').attr('placeholder', '请输入手机号');
+                $('#userPassword').attr('placeholder', '请输入短信验证码');
+                type = 1;
+                $('#getMegs').show();
+            });
+            $('#selName').on('click', function () {
+                $('#selCall').removeClass('current');
+                $('#selName').addClass('current');
+                $('#userName').attr('placeholder', '请输入用户名');
+                $('#userPassword').attr('placeholder', '请输入密码');
+                type = 2;
+                $('#getMegs').hide();
+            });
+            var getMsgs=function () {
+                var mobile = $('#userName').val();
+                if (mobile != '') {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/myt_wx/api/senMsg',
+                        data: JSON.stringify({
+                            mobile: $('#userName').val()
+                        }),
+                        dataType: 'json',
+                        timeout: 30000,
+                        contentType: 'application/json',
+                        success: function (data) {
+                            if (data && data.data) {
+                                console.log(data);
+                                $('#getMegs').off('click');
+                                var i=60;
+                                var s=setInterval(function(){
+                                    if(i!=0){
+                                        $('#getMegs').html(i--);
+                                    }else{
+                                        clearInterval(s);
+                                        $('#getMegs').html('获取验证码');
+                                        $('#getMegs').on('click', getMsgs);
+                                    }
+
+                                },1000);
+                            }
+                        }
+
+                    });
+                }
+
+            };
+            $('#getMegs').on('click', getMsgs);
+
+            $('#wxsubmit').on('click', function () {
+                $.ajax({
+                    type: 'POST',
+                    url: '/myt_wx/api/loginForOpenid',
+                    data: JSON.stringify({
+                        openid: window.localStorage.openid
+                    }),
+                    dataType: 'json',
+                    timeout: 30000,
+                    contentType: 'application/json',
+                    success: function (data) {
+                        if (data && data.data) {
+                            console.log(data);
+                            window.localStorage.token = data.data.token;
+                            window.location.replace('index.html#index');
+                        } else {
+                            alert(data.message);
+                        }
+                    }
+
+                });
+
+//                var appid = 'wx55210e305eb0d56c',
+//                        appSecret = '7cb7c98da1619c929a00f9019f6d6540',
+//                        scope = 'snsapi_base',//snsapi_base,snsapi_userinfo
+//                        state_url = encodeURIComponent(window.location.protocol + '//' + window.location.host + ':' + window.location.port + '/myt_wx/api/loginForCode'),
+//                        redirect_uri = encodeURIComponent('http://fmt.bbtang.com/wxauth/?app=try&url=' + state_url),
+//                        oauthUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid + '&redirect_uri=' + redirect_uri + '&response_type=code&scope=' + scope + '&state=' + encodeURIComponent(window.location.origin + window.location.pathname) + '#wechat_redirect';
+//                window.location.replace(oauthUrl);
+//                alert(JSON.stringify($.getJSON(oauthUrl)));
+            });
+
+
+        });
+    })(jQuery);
+</script>
+</html>

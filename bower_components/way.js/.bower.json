@@ -1,0 +1,35 @@
+{
+  "name": "way.js",
+  "homepage": "https://github.com/gwendall/way.js",
+  "authors": [
+    "Gwen <gwendall.esnault@gmail.com>"
+  ],
+  "description": "Simple, lightweight, persistent, framework-agnostic two-way databinding",
+  "main": "way.min.js",
+  "keywords": [
+    "javascript",
+    "databinding",
+    "database",
+    "form",
+    "input",
+    "frontend"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "1d1460f49c",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "1d1460f49c47a250d65026c0dea971eceade4474"
+  },
+  "_source": "git://github.com/gwendall/way.js.git",
+  "_target": "*",
+  "_originalSource": "way.js",
+  "_direct": true
+}

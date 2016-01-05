@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!--设置页面标题-->
+    <title>一元购</title>
+    <!-- css -->
+    <link rel="stylesheet" type="text/css" href="css/uitool-reset.css" media="all">
+    <link rel="stylesheet" type="text/css" href="css/uitool-modular.css" media="all">
+    <link rel="stylesheet" type="text/css" href="css/example.css" media="all">
+    <script type="text/javascript">
+        var resize = function () {
+            var html = document.documentElement,
+                    w = html.clientWidth / 320, w = 16 * w;
+            html.setAttribute('style', 'font-size:' + w + 'px');
+        }
+        window.addEventListener('resize', function () {
+            resize();
+        });
+        resize();
+    </script>
+</head>
+<body>
+
+<div id="footer">
+    <ul>
+        <li id="footer_index"><a href="#index"><em>商城首页</em></a></li>
+        <li id="footer_orders"><a href="#orders" href="javasctipt:;"><em>试用记录</em></a></li>
+        <li id="footer_info"><a href="#info"><em>个人资料</em></a></li>
+    </ul>
+</div>
+</body>
+<!-- lib -->
+<!-- app -->
+<script src="js/lib/requirejs/require.js" data-main="./js/config.js"></script>
+
+</html>
